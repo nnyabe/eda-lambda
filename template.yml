@@ -31,15 +31,21 @@ Resources:
   NotificationLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: eda-lambda.handler.NotifyHandler::handleRequest
+      Handler: eda-lambda.handler.NotifyHandler::handleRequest  # Adjust if handler path differs
       Runtime: java17
       Timeout: 30
       MemorySize: 256
       FunctionName: !Sub s3-upload-notifier-lambda-${EnvironmentName}
       CodeUri: ./
       Policies:
-        - S3CrudPolicy:
-            BucketName: !Ref UploadBucket
+        - Statement:
+            - Sid: S3Access
+              Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+                - s3:DeleteObject
+              Resource: !Sub arn:aws:s3:::s3-upload-notifier-${EnvironmentName}-${AWS::AccountId}/*
         - SNSPublishMessagePolicy:
             TopicName: !GetAtt NotificationTopic.TopicName
       Environment:
