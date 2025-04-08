@@ -38,8 +38,8 @@ jobs:
           EMAIL_SUBSCRIBERS: ${{ secrets.DEV_EMAIL_SUBSCRIBERS }}
         run: |
           sam deploy \
-            --stack-name s3-notifier-dev \
-            --parameter-overrides EnvironmentName=dev EmailSubscribers=$EMAIL_SUBSCRIBERS \
-            --no-fail-on-empty-changeset \
-            --capabilities CAPABILITY_IAM
-            --resolve-s3
+          --stack-name s3-notifier-dev \
+          --parameter-overrides EnvironmentName=dev EmailSubscribers=$EMAIL_SUBSCRIBERS \
+          --no-fail-on-empty-changeset \
+          --capabilities CAPABILITY_IAM \
+          --resolve-s3
