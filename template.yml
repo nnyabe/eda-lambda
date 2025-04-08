@@ -15,10 +15,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub s3-upload-notifier-${EnvironmentName}-${AWS::AccountId}
-      NotificationConfiguration:
-        LambdaConfigurations:
-          - Event: s3:ObjectCreated:*
-            Function: !GetAtt NotificationLambda.Arn
+      # Remove notification configuration from here
 
   NotificationTopic:
     Type: AWS::SNS::Topic
@@ -31,7 +28,7 @@ Resources:
   NotificationLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: eda-lambda.handler.NotifyHandler::handleRequest  # Adjust if handler path differs
+      Handler: eda-lambda.handler.NotifyHandler::handleRequest
       Runtime: java17
       Timeout: 30
       MemorySize: 256
@@ -51,14 +48,12 @@ Resources:
       Environment:
         Variables:
           SNS_TOPIC_ARN: !Ref NotificationTopic
-
-  LambdaInvokePermission:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !Ref NotificationLambda
-      Action: lambda:InvokeFunction
-      Principal: s3.amazonaws.com
-      SourceArn: !GetAtt UploadBucket.Arn
+      Events:
+        S3Event:
+          Type: S3
+          Properties:
+            Bucket: !Ref UploadBucket
+            Events: s3:ObjectCreated:*
 
 Outputs:
   BucketName:
