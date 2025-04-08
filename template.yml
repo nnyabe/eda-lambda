@@ -36,7 +36,7 @@ Resources:
       Timeout: 30
       MemorySize: 256
       FunctionName: !Sub s3-upload-notifier-lambda-${EnvironmentName}
-      CodeUri: /eda-lambda/target/
+      CodeUri: ./eda-lambda/
       Policies:
         - S3CrudPolicy:
             BucketName: !Ref UploadBucket
