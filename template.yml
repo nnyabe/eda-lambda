@@ -28,7 +28,7 @@ Resources:
   NotificationLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: eda-lambda.handler.NotifyHandler::handleRequest
+      Handler: eda-lambda.EdaLambdaApplication::handleRequest
       Runtime: java17
       Timeout: 30
       MemorySize: 256
